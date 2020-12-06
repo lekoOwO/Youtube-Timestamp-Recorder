@@ -100,6 +100,7 @@
             let data = localStorage.getItem(youtubeId);
             if (data && data.length) data = JSON.parse(data)
             if (data && Array.isArray(data) && data.length) {
+                $("#data").bootstrapTable("removeAll");
                 $("#data").bootstrapTable("append", data);
             } else {
                 localStorage.removeItem(window.youtubeId)
