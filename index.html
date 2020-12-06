@@ -97,7 +97,7 @@
         function loadData(){
             if (!window.youtubeId) return
 
-            let data = localStorage.getItem(youtubeId);
+            let data = localStorage.getItem(window.youtubeId);
             if (data && data.length) data = JSON.parse(data)
             if (data && Array.isArray(data) && data.length) {
                 $("#data").bootstrapTable("removeAll");
