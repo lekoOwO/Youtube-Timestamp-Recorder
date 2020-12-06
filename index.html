@@ -180,6 +180,7 @@
                 if (rawData.includes("http") || rawData.includes("youtube.com") || rawData.includes("youtu.be")){
                     window.player.loadVideoById(getYoutubeID(rawData))
                 } else {
+                    window.youtubeId = rawData
                     window.player.loadVideoById(rawData);
                 }
 
