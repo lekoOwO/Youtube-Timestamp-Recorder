@@ -87,12 +87,34 @@
 
     <!-- 表格 -->
     <script>
+        function saveData(){
+            if (!window.youtubeId) return
+
+            const data = $("#data").bootstrapTable("getData");
+            localStorage.setItem(window.youtubeId, JSON.stringify(data))
+        }
+
+        function loadData(){
+            if (!window.youtubeId) return
+
+            let data = localStorage.getItem(youtubeId);
+            if (data && data.length) data = JSON.parse(data)
+            if (data && Array.isArray(data) && data.length) {
+                $("#data").bootstrapTable("append", data);
+            } else {
+                localStorage.removeItem(window.youtubeId)
+            }
+        }
+
         function addRow(time, description){
             $("#data").bootstrapTable('append', {
                 time,
                 description
             });
+
+            saveData()
         }
+
         $().ready(() => {
             const $table = $("#data")
             $table.bootstrapTable({
@@ -122,6 +144,8 @@
                             field,       //列名
                             value: newValue        //cell值
                         })
+
+                        saveData()
                     })
                 }
             })
@@ -130,6 +154,8 @@
                     field: '0',
                     values: [true]
                 })
+
+                saveData()
             })
         })
     </script>
@@ -141,7 +167,9 @@
 
         function getYoutubeID(url){
             const regex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
-            return url.match(regex)[1]
+            window.youtubeId = url.match(regex)[1];
+
+            return window.youtubeId
         }
 
         document.addEventListener("DOMContentLoaded", e => {
@@ -153,6 +181,8 @@
                 } else {
                     window.player.loadVideoById(rawData);
                 }
+
+                loadData()
             })
             document.getElementById("add").addEventListener("click", e => {
                 const timestamp = window.player.getCurrentTime()
